@@ -1,0 +1,34 @@
+@import "tailwindcss";
+@source "../views";
+
+@theme {
+    /* Definisikan warna kustom Anda di sini */
+    /* Setiap properti di dalam @theme akan menjadi variabel CSS */
+
+    --color-primary: #021A29;
+    /* Contoh warna primer kustom */
+    --color-secondary: #132536;
+    /* Contoh warna sekunder kustom */
+    --color-success: #B3C8D0;
+    /* Contoh warna sukses */
+    --color-warning: #ffc107;
+    /* Contoh warna peringatan */
+    --color-info: #17a2b8;
+    /* Contoh warna info */
+
+    /* Anda juga bisa menambahkan shades kustom untuk warna yang ada */
+    --color-custom-gray-100: #f8f9fa;
+    --color-custom-gray-900: #212529;
+
+    /* Atau bahkan menimpa warna default Tailwind jika diperlukan */
+    /* --color-red-500: #ff0000; */
+}
+
+/* Anda juga bisa menambahkan CSS kustom lainnya di sini */
+@layer base {
+
+    /* Contoh: Set warna teks default untuk body */
+    body {
+        color: var(--color-custom-gray-900);
+    }
+}
