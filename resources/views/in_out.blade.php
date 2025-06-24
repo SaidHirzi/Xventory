@@ -101,27 +101,6 @@
                             <img src="{{ asset('img/search.png') }}" alt="Search"
                                 class="absolute top-1/2 left-1 transform -translate-y-1/2 w-5 h-5" />
                         </div>
-                        <div class="flex  mr-5">
-                            <div
-                                class="relative bg-blue-600 w-44 mt-5  rounded-3xl border border-gray-300 h-12 justify-center items-center flex ">
-                                <button type="text" placeholder="Add Item"
-                                    class="w-full pl-10 pr-10 py-3 px-6 text-sm rounded-3xl text-bold text- text-[#ffffff] cursor-pointer">
-                                    Add Category
-                                </button>
-                                <img src="{{ asset('img/add-circle.png') }}" alt="Search"
-                                    class="absolute top-1/2 left-3 transform -translate-y-1/2 w-5 h-5 cursor-pointer" />
-                            </div>
-                            <div
-                                class="relative w-30 h-12 mt-5 ml-10  rounded-3xl border border-gray-300 flex justify-center items-center">
-                                <button type="text" placeholder="Search"
-                                    class="w-full pl-10 pr-10 py-3 px-6 ml-2 rounded-3xl text-black text-lg cursor-pointer justify-center items-center"
-                                    href="/filter">
-                                    Filter
-                                </button>
-                                <img src="{{ asset('img/filter.png') }}" alt="Search"
-                                    class="absolute top-1/2 left-3 transform -translate-y-1/2 w-5 h-5" />
-                            </div>
-                        </div>
                     </div>
                     <div class=" h-120 overflow-y-auto scrollbar-thin scrollbar-success">
                         <div class="flex gap-4 px-10 py-10 h-full ">
@@ -153,10 +132,12 @@
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
-                            <ul class="mr-5  w-28">Supplier Code
+                            <ul class="mr-5  w-28">Supplier Name
                                 <li class="flex flex-col gap-8 mt-11 w- ">
                                     @foreach ($products as $product)
-                                        {{-- {{ $product->product_name }} --}}
+                                        <p>
+                                            {{ $product->product_supplier }}
+                                        </p>
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>

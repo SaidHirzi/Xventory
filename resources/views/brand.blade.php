@@ -148,13 +148,43 @@
                             <ul class=" justify-center  w-[20%] ">
                                 <p class="flex justify-center w-full mb-11">Action</p>
                                 @foreach ($brands as $brand)
-                                    <li class="flex gap-2 mb-6 w-full justify-center">
-                                        <img class="cursor-pointer" src="{{ asset('img/action.png') }}"
-                                            alt="">
-                                        <img class="cursor-pointer" src="{{ asset('img/action-1.png') }}"
-                                            width="30" />
-                                        <img class="cursor-pointer" src="{{ asset('img/action-2.png') }}"
-                                            width="30" />
+                                    <li class="flex gap-2 mb-2 w-full justify-center">
+                                        <div class=" flex gap-2 mt-1 ">
+                                            <div class="mb-3">
+                                                <button class="open-action-modal " data-id="{{ $brand->id }}"
+                                                    data-code="{{ $brand->kode_brand }}"
+                                                    data-name="{{ $brand->nama_brand }}"
+                                                    data-created="{{ $brand->created_at }}"
+                                                    data-updated="{{ $brand->updated_at }}"
+                                                    data-status="{{ $brand->status }}">
+                                                    <img class="cursor-pointer" src="{{ asset('img/action.png') }}"
+                                                        alt="">
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <button type="button" class="edit-button"
+                                                    data-id="{{ $brand->id }}"
+                                                    data-name="{{ $brand->nama_brand }}"
+                                                    data-code="{{ $brand->kode_brand }}"
+                                                    data-status="{{ $brand->status }}">
+                                                    <img class="cursor-pointer" src="{{ asset('img/action-1.png') }}"
+                                                        alt="">
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <form action="{{ route('brand.destroy', $brand->id) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini secara permanen?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit">
+                                                        <img src="{{ asset('img/action-2.png') }}" width="30"
+                                                            class="cursor-pointer" />
+                                                    </button>
+                                                </form>
+                                            </div>
+
+                                        </div>
                                     </li>
                                 @endforeach
                             </ul>
@@ -223,13 +253,66 @@
 
         </div>
     </div>
+    <div id="modal-overlay1"
+        class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden justify-center items-center z-50 w-full h-full">
+        <div
+            class="bg-white shadow-xl w-[600px] h-[600px] p-8 rounded-3xl relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Detail Produk</h2>
+                <button id="close-modal2" class="text-gray-500 hover:text-red-500 text-2xl font-bold">&times;</button>
+            </div>
+            <div id="modal-content" class="gap-y-9">
+                <!-- Konten diisi dinamis lewat JS -->
+            </div>
+        </div>
+    </div>
+    <div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex justify-center items-center min-h-screen">
+            <div class="bg-white shadow-xl w-[800px] p-8 rounded-3xl relative">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Edit Barang</h2>
+                    <button id="close-edit-modal"
+                        class="text-gray-500 hover:text-red-500 text-2xl font-bold">&times;</button>
+                </div>
+                <form id="edit-form" method="POST" action="" enctype="multipart/form-data"
+                    class="grid grid-cols-2 gap-6">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="brand_id" id="edit-brand-id">
+
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-1">Nama Barang</label>
+                        <input type="text" name="brand_name" id="edit-brand-name"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-1">Brand Code</label>
+                        <input type="text" name="brand_code" id="edit-brand-code"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-semibold mb-1">Status</label>
+                        <input type="text" name="brand_status" id="edit-status"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    </div>
+                    <div class="flex justify-end gap-4 mt-8 col-span-2">
+                        <button type="button" id="close-edit-modal1"
+                            class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100">Batal</button>
+                        <button type="submit"
+                            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
 
     <script>
         const addButton = document.querySelector('.bg-blue-600 button');
         const modal = document.getElementById('modal-overlay');
         const closeModal = document.getElementById('close-modal');
         const closeModal1 = document.getElementById('close-modal1');
-        const pageWrapper = document.querySelector('.bg-secondary');
 
         addButton.addEventListener('click', () => {
             modal.classList.remove('hidden');
@@ -240,9 +323,77 @@
             modal.classList.add('hidden');
             pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
         });
+
         closeModal1.addEventListener('click', () => {
             modal.classList.add('hidden');
             pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
+        });
+
+        const editButtons = document.querySelectorAll('.edit-button');
+        const editModal = document.getElementById('edit-modal');
+        const closeEditModal = document.getElementById('close-edit-modal');
+        const closeEditModal1 = document.getElementById('close-edit-modal1');
+        const editForm = document.getElementById('edit-form');
+
+        editButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.dataset.id;
+                const name = button.dataset.name;
+                const code = button.dataset.code;
+                const status = button.dataset.status;
+
+
+                document.getElementById('edit-brand-id').value = id;
+                document.getElementById('edit-brand-name').value = name;
+                document.getElementById('edit-brand-code').value = code;
+                document.getElementById('edit-status').value = status;
+
+
+                editForm.action = `/brand/update/${id}`; // ganti sesuai route kamu
+                editModal.classList.remove('hidden');
+                pageWrapper.classList.add('blur-sm', 'pointer-events-none');
+            });
+        });
+
+        [closeEditModal, closeEditModal1].forEach(button => {
+            button.addEventListener('click', () => {
+                editModal.classList.add('hidden');
+                pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const actionButtons = document.querySelectorAll('.open-action-modal');
+            const modal1 = document.getElementById('modal-overlay1');
+            const modalContent = document.getElementById('modal-content');
+            const pageWrapper = document.querySelector('.bg-secondary');
+            const closeModal2 = document.getElementById('close-modal2');
+
+            actionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const code = button.dataset.code;
+                    const name = button.dataset.name;
+                    const status = button.dataset.status;
+                    const created = button.dataset.created;
+                    const updated = button.dataset.updated;
+
+                    modalContent.innerHTML = `
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Kode brand:</label><p class="text-gray-700 font-semibold">${code}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Nama brand:</label><p class="text-gray-700 font-semibold">${name}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Status:</label><p class="text-gray-700 font-semibold">${status}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Created At:</label><p class="text-gray-700 font-semibold">${created}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Updated At:</label><p class="text-gray-700 font-semibold">${updated}</p></div>
+                    `;
+
+                    modal1.classList.remove('hidden');
+                    pageWrapper?.classList.add('blur-sm', 'pointer-events-none');
+                });
+            });
+
+            closeModal2.addEventListener('click', () => {
+                modal1.classList.add('hidden');
+                pageWrapper?.classList.remove('blur-sm', 'pointer-events-none');
+            });
         });
     </script>
 </body>

@@ -101,33 +101,12 @@
                             <img src="{{ asset('img/search.png') }}" alt="Search"
                                 class="absolute top-1/2 left-1 transform -translate-y-1/2 w-5 h-5" />
                         </div>
-                        <div class="flex  mr-5">
-                            <div
-                                class="relative bg-blue-600 w-44 mt-5  rounded-3xl border border-gray-300 h-12 justify-center items-center flex ">
-                                <button type="text" placeholder="Add Item"
-                                    class="w-full pl-10 pr-10 py-3 px-6 text-sm rounded-3xl text-bold text- text-[#ffffff] cursor-pointer">
-                                    Add Category
-                                </button>
-                                <img src="{{ asset('img/add-circle.png') }}" alt="Search"
-                                    class="absolute top-1/2 left-3 transform -translate-y-1/2 w-5 h-5 cursor-pointer" />
-                            </div>
-                            <div
-                                class="relative w-30 h-12 mt-5 ml-10  rounded-3xl border border-gray-300 flex justify-center items-center">
-                                <button type="text" placeholder="Search"
-                                    class="w-full pl-10 pr-10 py-3 px-6 ml-2 rounded-3xl text-black text-lg cursor-pointer justify-center items-center"
-                                    href="/filter">
-                                    Filter
-                                </button>
-                                <img src="{{ asset('img/filter.png') }}" alt="Search"
-                                    class="absolute top-1/2 left-3 transform -translate-y-1/2 w-5 h-5" />
-                            </div>
-                        </div>
                     </div>
                     <div class=" h-120 overflow-y-auto scrollbar-thin scrollbar-success">
                         <div class="flex gap-4 px-10 py-10 h-full ">
                             <ul class="">
                                 <li class="flex flex-col gap-[43px] mt-19">
-                                    @foreach ($products as $product)
+                                    @foreach ($out_items as $out_item)
                                         <input type="checkbox" class=" "></input>
                                     @endforeach
                                 </li>
@@ -148,21 +127,21 @@
                             </ul>
                             <ul class="mr-5 w-24">Date
                                 <li class="flex flex-col gap-8 mt-11">
-                                    @foreach ($products as $product)
+                                    @foreach ($out_items as $out_item)
                                         <p>2024-10-01</p>
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
                             <ul class="mr-5  w-28">Supplier Code
                                 <li class="flex flex-col gap-8 mt-11 w- ">
-                                    @foreach ($products as $product)
+                                    @foreach ($out_items as $out_item)
                                         {{-- {{ $product->product_name }} --}}
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
                             <ul class=" justify-center  w-[20%] ">
                                 <p class="flex justify-center w-full mb-11">Action</p>
-                                @foreach ($products as $product)
+                                @foreach ($out_items as $out_item)
                                     <li class="flex gap-2 mb-6 w-full justify-center">
                                         <img class="cursor-pointer" src="{{ asset('img/action.png') }}"
                                             alt="">

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\OutItem;
+    use App\Models\Brand;
+
 
 
 class ProductController extends Controller
@@ -17,7 +19,7 @@ class ProductController extends Controller
             'product_category' => 'required|string',
             'product_brand' => 'required|string',
             'product_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'product_description' => 'nullable|string',
+            'product_supplier' => 'required|string',
         ]);
 
         // Simpan gambar jika ada
@@ -33,7 +35,7 @@ class ProductController extends Controller
             'product_category' => $request->product_category,
             'product_brand' => $request->product_brand,
             'product_image' => $imagePath,
-            'product_description' => $request->product_description,
+            'product_supplier' => $request->product_supplier,
         ]);
 
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan.');
@@ -57,7 +59,7 @@ class ProductController extends Controller
             'product_category' => $product->product_category,
             'product_brand' => $product->product_brand,
             'product_stock' => $product->product_stock,
-            'product_description' => $product->product_description,
+            'product_supplier' => $product->product_supplier,
             'product_image' => $product->product_image,
         ]);
 
@@ -74,11 +76,27 @@ class ProductController extends Controller
         $product->product_stock = $request->product_stock;
         $product->product_category = $request->product_category;
         $product->product_brand = $request->product_brand;
-        $product->product_description = $request->product_description;
+        $product->product_supplier = $request->product_supplier;
         $product->save();
 
         return redirect()->back()->with('success', 'Produk berhasil diperbarui.');
     }
+
+
+    public function index(Request $request)
+    {
+        $query = Product::query();
+
+        if ($request->has('search')) {
+            $query->where('product_name', 'like', '%' . $request->search . '%');
+        }
+
+        $products = $query->get();
+        $brands = Brand::all(); // Tambahkan ini
+
+        return view('product.index', compact('products', 'brands'));
+    }
+
 
 
 }

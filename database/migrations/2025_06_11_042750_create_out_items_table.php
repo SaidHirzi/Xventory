@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('product_category');
             $table->string('product_brand');
             $table->integer('product_stock');
-            $table->text('product_description')->nullable();
+            $table->text('product_supplier')->nullable();
             $table->string('product_image')->nullable();
             $table->timestamps();
         });

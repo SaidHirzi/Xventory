@@ -12,9 +12,9 @@ class product extends Model
         'product_category',
         'product_brand',
         'product_image',
-        'product_description',
+        'product_supplier',
     ];
 
-    
+
 
 }

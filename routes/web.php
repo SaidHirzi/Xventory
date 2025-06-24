@@ -50,13 +50,15 @@ Route::get('/product', function () {
     $products = product::all();
     $categories = category::all();
     $brands = brand::all();
-    return view('product', ['products' => $products, 'brands' => $brands, 'categories' => $categories]);
+    $suppliers = supplier::all();
+    return view('product', ['products' => $products, 'brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers]);
 })->middleware('auth');
 
 Route::post('/product/store', [ProductController::class, 'store'])->name('product.store');
 // Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
 Route::post('/product/move-to-out/{id}', [ProductController::class, 'moveToOut'])->name('product.moveToOut');
 Route::put('/product/update/{id}', [ProductController::class, 'update'])->name('product.update');
+Route::get('/products', [ProductController::class, 'index'])->name('product.index');
 
 
 Route::get('/category', function () {
@@ -66,6 +68,9 @@ Route::get('/category', function () {
     return view('category', ['products' => $products, 'categories' => $categories]);
 })->middleware('auth');
 Route::post('/category/store', [categorycontroller::class, 'store'])->name('category.store');
+Route::put('/category/update/{id}', [categoryController::class, 'update'])->name('category.update');
+Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
+
 
 
 Route::get('/brand', function () {
@@ -76,6 +81,9 @@ Route::get('/brand', function () {
 })->middleware('auth');
 
 Route::post('/brand/store', [brandcontroller::class, 'store'])->name('brand.store');
+Route::put('/brand/update/{id}', [brandController::class, 'update'])->name('brand.update');
+Route::delete('/brand/{id}', [brandController::class, 'destroy'])->name('brand.destroy');
+
 
 
 Route::get('/supplier', function () {
@@ -87,13 +95,18 @@ Route::get('/supplier', function () {
 })->middleware('auth');
 
 Route::post('/suppliers', [SupplierController::class, 'store'])->name('suppliers.store');
+Route::delete('/supplier/{id}', [SupplierController::class, 'destroy'])->name('supplier.destroy');
+Route::put('/supplier/update/{id}', [SupplierController::class, 'update'])->name('supplier.update');
+
 
 
 Route::get('/in_out', function () {
     $products = product::all();
     $brands = brand::all();
+    $categories = category::all();
+    $suppliers = supplier::all();
 
-    return view('in_out', ['products' => $products, 'brands' => $brands]);
+    return view('in_out', ['products' => $products, 'brands' => $brands, 'categories' => $categories, 'suppliers' => $suppliers]);
 })->middleware('auth');
 
 Route::get('/out', function () {

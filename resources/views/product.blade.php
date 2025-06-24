@@ -72,13 +72,18 @@
             <div class="flex-col items-center justify-center h-full w-full flex gap-3">
                 <div class="bg-white h-[92%] w-[97%] mr-8 ml-7 rounded-3xl ">
                     <div class="justify-between flex ">
-                        <div
-                            class="relative w-60 mt-10 ml-10 rounded-3xl border border-gray-300 h-12 justify-center items-center flex">
-                            <input type="text" placeholder="Search"
-                                class="w-full pl-10 pr-10 py-3 px-6 rounded-3xl text-black text-lg" />
-                            <img src="{{ asset('img/search.png') }}" alt="Search"
-                                class="absolute top-1/2 left-1 transform -translate-y-1/2 w-5 h-5" />
-                        </div>
+                        <form action="{{ route('product.index') }}" method="GET"
+                            class="relative w-60 mt-10 ml-10 rounded-3xl border border-gray-300 h-12 flex items-center">
+                            <input type="text" name="search" placeholder="Search"
+                                class="w-full pl-10 pr-10 py-3 px-6 rounded-3xl text-black text-lg"
+                                value="{{ request('search') }}" />
+                            <button type="submit" class="absolute left-1">
+                                <img src="{{ asset('img/search.png') }}" alt="Search"
+                                    class="w-5 h-5 cursor-pointer" />
+                            </button>
+                        </form>
+
+
                         <div class="flex  mr-5">
                             <div
                                 class="relative bg-blue-600 w-40 mt-10  rounded-3xl border border-gray-300 h-12 justify-center items-center flex ">
@@ -89,35 +94,26 @@
                                 <img src="{{ asset('img/add-circle.png') }}" alt="Search"
                                     class="absolute top-1/2 left-3 transform -translate-y-1/2 w-5 h-5 cursor-pointer" />
                             </div>
-                            <div
-                                class="relative w-30 h-12 mt-10 ml-10  rounded-3xl border border-gray-300 flex justify-center items-center">
-                                <button type="text" placeholder="Search"
-                                    class="w-full pl-10 pr-10 py-3 px-6 ml-2 rounded-3xl text-black text-lg cursor-pointer justify-center items-center"
-                                    href="/filter">
-                                    Filter
-                                </button>
-                                <img src="{{ asset('img/filter.png') }}" alt="Search"
-                                    class="absolute top-1/2 left-3 transform -translate-y-1/2 w-5 h-5" />
-                            </div>
                         </div>
                     </div>
                     <div class=" h-120 overflow-y-auto scrollbar-thin scrollbar-success">
                         <div class="flex gap-4 px-10 py-10 h-full ">
-                            {{-- <ul class="mt-7 ">
-                                @foreach ($products as $product)
-                                    <li class="flex flex-col  mt-11">
-                                        <input type="checkbox" class=" "></input>
-                                    </li>
-                                @endforeach
-                            </ul> --}}
-                            <ul class="">Kode Barang
-                                <li class="flex flex-col gap-10 mt-5">
+                            <ul class="">
+                                <li>Kode Barang</li>
+                                <ul class="flex flex-col gap-10 mt-5">
                                     @foreach ($products as $product)
-                                        {{-- <p>{{ $product->product_code }}</p> --}}
-                                        <p>{{ $product->id }}</p>
-                                    @endforeach ($users as $user)
-                                </li>
+                                        @php
+                                            // Ambil brand berdasarkan nama brand yang sama dengan product_brand
+                                            $brand = $brands->firstWhere('nama_brand', $product->product_brand);
+                                        @endphp
+                                        <li class="flex ">
+                                            <span>{{ $brand ? $brand->kode_brand : '-' }}</span>
+                                            <span>{{ $product->id }}</span>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </ul>
+
                             <ul class="w-[263px]">Nama Barang
                                 <li class="flex flex-col gap-10 mt-11 ">
                                     @foreach ($products as $product)
@@ -180,7 +176,7 @@
                                                     data-stock="{{ $product->product_stock }}"
                                                     data-created="{{ $product->created_at }}"
                                                     data-updated="{{ $product->updated_at }}"
-                                                    data-description="{{ $product->product_description }}">
+                                                    data-supplier="{{ $product->product_supplier }}">
                                                     <img class="cursor-pointer" src="{{ asset('img/action.png') }}"
                                                         alt="">
                                                 </button>
@@ -192,7 +188,7 @@
                                                     data-stock="{{ $product->product_stock }}"
                                                     data-category="{{ $product->product_category }}"
                                                     data-brand="{{ $product->product_brand }}"
-                                                    data-description="{{ $product->product_description }}">
+                                                    data-supplier="{{ $product->product_supplier }}">
                                                     <img class="cursor-pointer" src="{{ asset('img/action-1.png') }}"
                                                         alt="">
                                                 </button>
@@ -279,6 +275,18 @@
                     </select>
                 </div>
 
+                <!-- supplier -->
+                <div>
+                    <label for="product_supplier" class="block text-gray-700 font-semibold mb-1">supplier <span
+                            class="text-red-500">*</span></label>
+                    <select id="product_supplier" name="product_supplier"
+                        class="w-full px-4 py-2 border cursor-pointer border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white">
+                        <option disabled selected>Pilih Supplier</option>
+                        @foreach ($suppliers as $supplier)
+                            <option>{{ $supplier->supplier_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <!-- Gambar -->
                 <div>
                     <label for="product_image" class="block text-gray-700 font-semibold mb-1">Gambar</label>
@@ -286,12 +294,7 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                 </div>
 
-                <!-- Deskripsi -->
-                <div>
-                    <label for="product_description" class="block text-gray-700 font-semibold mb-1">Deskripsi</label>
-                    <textarea id="product_description" name="product_description" rows="3" placeholder="Deskripsi produk"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
-                </div>
+
                 <div class="flex justify-end gap-4 mt-8 col-span-2">
                     <button type="button" id="close-modal1"
                         class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition cursor-pointer">
@@ -305,75 +308,6 @@
             <!-- Tombol -->
         </div>
     </div>
-    {{-- <div id="modal-overlay1"
-        class="fixed  inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden justify-center items-center z-50 w-full h-full">
-        <div
-            class="bg-white shadow-xl w-[600px] h-[600px] p-8 rounded-3xl relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Detail Produk</h2>
-                <button id="close-modal2" class="text-gray-500 hover:text-red-500 text-2xl font-bold">&times;</button>
-            </div>
-            <div class="gap-y-9">
-                <div class="flex mb-4 ">
-                    <label for="product_name" class="block text-gray-700 font-semibold mb-1 mr-3">Kode Produk :
-                    </label>
-                    @foreach ($products as $product)
-                        <p class="text-gray-700 font-semibold">
-                            {{ $product->product_code }}
-                        </p>
-                    @endforeach
-                </div>
-                <div class="flex mb-4">
-                    <label for="product_name" class="block text-gray-700 font-semibold mb-1 mr-3">Nama Produk :
-                    </label>
-                    @foreach ($products as $product)
-                        <p class="text-gray-700 font-semibold">
-                            {{ $product->product_name }}
-                        </p>
-                    @endforeach
-                </div>
-                <div class="flex mb-4">
-                    <label for="product_name" class="block text-gray-700 font-semibold mb-1 mr-3">Jumlah :
-                    </label>
-                    @foreach ($products as $product)
-                        <p class="text-gray-700 font-semibold">
-                            {{ $product->product_stock }}
-                        </p>
-                    @endforeach
-                </div>
-                <div class="flex mb-4">
-                    <label for="product_name" class="block text-gray-700 font-semibold mb-1 mr-3">Created_At :
-                    </label>
-                    @foreach ($products as $product)
-                        <p class="text-gray-700 font-semibold">
-                            {{ $product->created_at }}
-                        </p>
-                    @endforeach
-                </div>
-                <div class="flex mb-4">
-                    <label for="product_name" class="block text-gray-700 font-semibold mb-1 mr-3">Updated_At :
-                    </label>
-                    @foreach ($products as $product)
-                        <p class="text-gray-700 font-semibold">
-                            {{ $product->updated_at }}
-                        </p>
-                    @endforeach
-                </div>
-                <div class="flex mb-4">
-                    <label for="product_name" class="block text-gray-700 font-semibold mb-1 mr-3">Description :
-                    </label>
-                    @foreach ($products as $product)
-                        <p class="text-gray-700 font-semibold">
-                            {{ $product->product_description }}
-                        </p>
-                    @endforeach
-                </div>
-                <div>
-
-                </div>
-            </div>
-        </div>
-    </div> --}}
     <div id="modal-overlay1"
         class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden justify-center items-center z-50 w-full h-full">
         <div
@@ -387,7 +321,6 @@
             </div>
         </div>
     </div>
-
     <div id="edit-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
         <div class="flex justify-center items-center min-h-screen">
             <div class="bg-white shadow-xl w-[800px] p-8 rounded-3xl relative">
@@ -424,7 +357,7 @@
                     </div>
                     <div class="col-span-2">
                         <label class="block text-gray-700 font-semibold mb-1">Deskripsi</label>
-                        <textarea name="product_description" id="edit-product-description" rows="3"
+                        <textarea name="product_supplier" id="edit-product-supplier" rows="3"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg"></textarea>
                     </div>
                     <div class="flex justify-end gap-4 mt-8 col-span-2">
@@ -445,12 +378,6 @@
         const modal = document.getElementById('modal-overlay');
         const closeModal = document.getElementById('close-modal');
         const closeModal1 = document.getElementById('close-modal1');
-        // const pageWrapper = document.querySelector('.bg-secondary');
-
-        // const openActionModal = document.getElementById('open-action-modal');
-        // const modal1 = document.getElementById('modal-overlay1');
-        // const closeModal2 = document.getElementById('close-modal2');
-
 
         addButton.addEventListener('click', () => {
             modal.classList.remove('hidden');
@@ -467,17 +394,6 @@
             pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
         });
 
-        // // Modal Action
-        // openActionModal.addEventListener('click', () => {
-        //     modal1.classList.remove('hidden');
-        //     pageWrapper.classList.add('blur-sm', 'pointer-events-none');
-        // });
-
-        // closeModal2.addEventListener('click', () => {
-        //     modal1.classList.add('hidden');
-        //     pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
-        // });
-
         const editButtons = document.querySelectorAll('.edit-button');
         const editModal = document.getElementById('edit-modal');
         const closeEditModal = document.getElementById('close-edit-modal');
@@ -491,14 +407,14 @@
                 const stock = button.dataset.stock;
                 const category = button.dataset.category;
                 const brand = button.dataset.brand;
-                const description = button.dataset.description;
+                const supplier = button.dataset.supplier;
 
                 document.getElementById('edit-product-id').value = id;
                 document.getElementById('edit-product-name').value = name;
                 document.getElementById('edit-product-stock').value = stock;
                 document.getElementById('edit-product-category').value = category;
                 document.getElementById('edit-product-brand').value = brand;
-                document.getElementById('edit-product-description').value = description;
+                document.getElementById('edit-product-supplier').value = supplier;
 
                 editForm.action = `/product/update/${id}`; // ganti sesuai route kamu
                 editModal.classList.remove('hidden');
@@ -527,15 +443,15 @@
                     const stock = button.dataset.stock;
                     const created = button.dataset.created;
                     const updated = button.dataset.updated;
-                    const description = button.dataset.description;
+                    const supplier = button.dataset.supplier;
 
                     modalContent.innerHTML = `
                     <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Kode Produk:</label><p class="text-gray-700 font-semibold">${code}</p></div>
                     <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Nama Produk:</label><p class="text-gray-700 font-semibold">${name}</p></div>
                     <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Jumlah:</label><p class="text-gray-700 font-semibold">${stock}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">supplier:</label><p class="text-gray-700 font-semibold">${supplier}</p></div>
                     <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Created At:</label><p class="text-gray-700 font-semibold">${created}</p></div>
                     <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Updated At:</label><p class="text-gray-700 font-semibold">${updated}</p></div>
-                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Deskripsi:</label><p class="text-gray-700 font-semibold">${description}</p></div>
                     `;
 
                     modal1.classList.remove('hidden');

@@ -15,7 +15,7 @@ class OutItem extends Model
         'product_category',
         'product_brand',
         'product_stock',
-        'product_description',
+        'product_supplier',
         'product_image',
     ];
 }
