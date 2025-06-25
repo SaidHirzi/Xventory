@@ -10,16 +10,17 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'product_name' => 'required',
-            'product_category' => 'required',
-            'product_status' => 'required',
+            'category_code' => 'required',
+            'category_name' => 'required',
+            'category_status' => 'required',
         ]);
 
         category::create([
-            'category_code' => $request->product_name,
-            'category_name' => $request->product_category,
-            'status' => $request->product_status,
+            'category_code' => $request->category_code,
+            'category_name' => $request->category_name,
+            'status' => $request->category_status,
         ]);
+
 
         return redirect()->back()->with('success', 'Kategori berhasil ditambahkan.');
     }

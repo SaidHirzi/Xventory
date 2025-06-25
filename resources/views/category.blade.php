@@ -73,7 +73,7 @@
                 <div class="bg-white h-[92%] w-[97%] mr-8 ml-7 rounded-3xl ">
                     <div class="justify-end flex ">
                         {{-- <div
-                            class="relative w-60 mt-10 ml-10 rounded-3xl border border-gray-300 h-12 hidden justify-center items-center flex">
+                            class="relative w-60 mt-10 ml-10 rounded-3xl border border-gray-300 h-12  justify-center items-center flex">
                             <input type="text" placeholder="Search"
                                 class="w-full pl-10 pr-10 py-3 px-6 rounded-3xl text-black text-lg" />
                             <img src="{{ asset('img/search.png') }}" alt="Search"
@@ -203,9 +203,9 @@
 
                 <!-- Kode Kategori -->
                 <div>
-                    <label for="product_name" class="block text-gray-700 font-semibold mb-1">Kode Kategori <span
+                    <label for="category_code" class="block text-gray-700 font-semibold mb-1">Kode Kategori <span
                             class="text-red-500">*</span></label>
-                    <input type="text" id="product_name" name="product_name" placeholder="Masukan kode kategori"
+                    <input type="text" id="product_name" name="category_code" placeholder="Masukan kode kategori"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
                 </div>
 
@@ -223,9 +223,9 @@
 
                 <!-- Nama Kategori -->
                 <div>
-                    <label for="nama_kategori" class="block text-gray-700 font-semibold mb-1">Kategori <span
+                    <label for="category_name" class="block text-gray-700 font-semibold mb-1">Kategori <span
                             class="text-red-500">*</span></label>
-                    <input type="text" id="nama_kategori" name="product_category"
+                    <input type="text" id="nama_kategori" name="category_name"
                         placeholder="Masukkan Nama Kategori"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
                 </div>

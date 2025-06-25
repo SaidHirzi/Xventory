@@ -94,13 +94,13 @@
                         </div>
                     </div>
                     <div class="justify-between flex ">
-                        <div
+                        {{-- <div
                             class="relative w-60 mt-5 ml-10 rounded-3xl border border-gray-300 h-12 justify-center items-center flex">
                             <input type="text" placeholder="Search"
                                 class="w-full pl-10 pr-10 py-3 px-6 rounded-3xl text-black text-lg" />
                             <img src="{{ asset('img/search.png') }}" alt="Search"
                                 class="absolute top-1/2 left-1 transform -translate-y-1/2 w-5 h-5" />
-                        </div>
+                        </div> --}}
                     </div>
                     <div class=" h-120 overflow-y-auto scrollbar-thin scrollbar-success">
                         <div class="flex gap-4 px-10 py-10 h-full ">
@@ -113,7 +113,7 @@
                             </ul>
                             <ul class="">
                                 <li>Kode Barang</li>
-                                <ul class="flex flex-col gap-10 mt-11">
+                                <ul class="flex flex-col gap-8 mt-11">
                                     @foreach ($products as $product)
                                         @php
                                             // Ambil brand berdasarkan nama brand yang sama dengan product_brand
@@ -152,13 +152,19 @@
                             <ul class=" justify-center  w-[20%] ">
                                 <p class="flex justify-center w-full mb-11">Action</p>
                                 @foreach ($products as $product)
-                                    <li class="flex gap-2 mb-6 w-full justify-center">
-                                        <img class="cursor-pointer" src="{{ asset('img/action.png') }}"
-                                            alt="">
-                                        <img class="cursor-pointer" src="{{ asset('img/action-1.png') }}"
-                                            width="30" />
-                                        <img class="cursor-pointer" src="{{ asset('img/action-2.png') }}"
-                                            width="30" />
+                                    <li class="flex gap-2 mb-1 w-full justify-center">
+                                        <div class="mb-3">
+                                            <button class="open-action-modal " data-id="{{ $product->id }}"
+                                                data-address="{{ $product->address }}"
+                                                data-name="{{ $product->product_name }}"
+                                                data-code="{{ $product->product_code }}"
+                                                data-created="{{ $product->created_at }}"
+                                                data-updated="{{ $product->updated_at }}"
+                                                data-status="{{ $product->status }}">
+                                                <img class="cursor-pointer" src="{{ asset('img/action.png') }}"
+                                                    alt="">
+                                            </button>
+                                        </div>
                                     </li>
                                 @endforeach
                             </ul>
@@ -226,15 +232,25 @@
         </div>
     </div>
 
+    <div id="modal-overlay1"
+        class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden justify-center items-center z-50 w-full h-full">
+        <div
+            class="bg-white shadow-xl w-[600px] h-[600px] p-8 rounded-3xl relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Detail Produk</h2>
+                <button id="close-modal2" class="text-gray-500 hover:text-red-500 text-2xl font-bold">&times;</button>
+            </div>
+            <div id="modal-content" class="gap-y-9">
+                <!-- Konten diisi dinamis lewat JS -->
+            </div>
+        </div>
+    </div>
+
     <script>
         const addButton = document.querySelector('.bg-blue-600 button');
         const modal = document.getElementById('modal-overlay');
         const closeModal = document.getElementById('close-modal');
         const closeModal1 = document.getElementById('close-modal1');
-        const pageWrapper = document.querySelector('.bg-secondary');
-        const btnIn = document.getElementById('btn-in');
-        const btnOut = document.getElementById('btn-out');
-        const items = document.querySelectorAll('[data-status]');
 
         addButton.addEventListener('click', () => {
             modal.classList.remove('hidden');
@@ -245,27 +261,76 @@
             modal.classList.add('hidden');
             pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
         });
+
         closeModal1.addEventListener('click', () => {
             modal.classList.add('hidden');
             pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
         });
 
-        function filterItems(status) {
-            items.forEach(item => {
-                if (item.dataset.status === status) {
-                    item.classList.remove('hidden');
-                } else {
-                    item.classList.add('hidden');
-                }
-            });
-        }
+        const editButtons = document.querySelectorAll('.edit-button');
+        const editModal = document.getElementById('edit-modal');
+        const closeEditModal = document.getElementById('close-edit-modal');
+        const closeEditModal1 = document.getElementById('close-edit-modal1');
+        const editForm = document.getElementById('edit-form');
 
-        btnIn.addEventListener('click', () => {
-            filterItems('in');
+        editButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const id = button.dataset.id;
+                const name = button.dataset.name;
+                const code = button.dataset.code;
+                const status = button.dataset.status;
+
+                document.getElementById('edit-product-id').value = id;
+                document.getElementById('edit-product-name').value = name;
+                document.getElementById('edit-product-code').value = code;
+                document.getElementById('edit-status').value = status;
+
+
+                editForm.action = `/brand/update/${id}`; // ganti sesuai route kamu
+                editModal.classList.remove('hidden');
+                pageWrapper.classList.add('blur-sm', 'pointer-events-none');
+            });
         });
 
-        btnOut.addEventListener('click', () => {
-            filterItems('out');
+        [closeEditModal, closeEditModal1].forEach(button => {
+            button.addEventListener('click', () => {
+                editModal.classList.add('hidden');
+                pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const actionButtons = document.querySelectorAll('.open-action-modal');
+            const modal1 = document.getElementById('modal-overlay1');
+            const modalContent = document.getElementById('modal-content');
+            const pageWrapper = document.querySelector('.bg-secondary');
+            const closeModal2 = document.getElementById('close-modal2');
+
+            actionButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const code = button.dataset.code;
+                    const name = button.dataset.name;
+                    const status = button.dataset.status;
+                    const created = button.dataset.created;
+                    const updated = button.dataset.updated;
+
+                    modalContent.innerHTML = `
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Kode Brand:</label><p class="text-gray-700 font-semibold">${code}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Nama Brand:</label><p class="text-gray-700 font-semibold">${name}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Status:</label><p class="text-gray-700 font-semibold">${status}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Created At:</label><p class="text-gray-700 font-semibold">${created}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Updated At:</label><p class="text-gray-700 font-semibold">${updated}</p></div>
+                    `;
+
+                    modal1.classList.remove('hidden');
+                    pageWrapper?.classList.add('blur-sm', 'pointer-events-none');
+                });
+            });
+
+            closeModal2.addEventListener('click', () => {
+                modal1.classList.add('hidden');
+                pageWrapper?.classList.remove('blur-sm', 'pointer-events-none');
+            });
         });
     </script>
 </body>

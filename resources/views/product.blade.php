@@ -212,9 +212,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
     </div>
     <div id="modal-overlay"

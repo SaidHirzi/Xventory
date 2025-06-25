@@ -194,7 +194,7 @@
 
             <!-- Header -->
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Tambah Barang</h2>
+                <h2 class="text-2xl font-bold text-gray-800">Tambah Brand</h2>
                 <button id="close-modal" class="text-gray-500 hover:text-red-500 text-2xl font-bold">&times;</button>
             </div>
 
