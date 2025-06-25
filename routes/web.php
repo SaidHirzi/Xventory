@@ -1,19 +1,21 @@
 <?php
 
 use App\Models\User;
-use App\Models\brand;
 use App\Models\category;
 use App\Models\product;
 use App\Models\supplier;
 use App\Models\OutItem;
+use App\Models\Brand;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\categorycontroller;
-use App\Http\Controllers\brandcontroller;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\productcontroller;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 
 Route::get('/', function () {
@@ -44,6 +46,8 @@ Route::post('/logout', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 
 
 Route::get('/product', function () {
@@ -59,6 +63,8 @@ Route::post('/product/store', [ProductController::class, 'store'])->name('produc
 Route::post('/product/move-to-out/{id}', [ProductController::class, 'moveToOut'])->name('product.moveToOut');
 Route::put('/product/update/{id}', [ProductController::class, 'update'])->name('product.update');
 Route::get('/products', [ProductController::class, 'index'])->name('product.index');
+Route::get('/product/search', [ProductController::class, 'searchPage'])->name('product.search');
+
 
 
 Route::get('/category', function () {
@@ -67,8 +73,8 @@ Route::get('/category', function () {
 
     return view('category', ['products' => $products, 'categories' => $categories]);
 })->middleware('auth');
-Route::post('/category/store', [categorycontroller::class, 'store'])->name('category.store');
-Route::put('/category/update/{id}', [categoryController::class, 'update'])->name('category.update');
+Route::post('/category/store', [CategoryController::class, 'store'])->name('category.store');
+Route::put('/category/update/{id}', [CategoryController::class, 'update'])->name('category.update');
 Route::delete('/category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
 
 
@@ -79,11 +85,9 @@ Route::get('/brand', function () {
 
     return view('brand', ['products' => $products, 'brands' => $brands]);
 })->middleware('auth');
-
-Route::post('/brand/store', [brandcontroller::class, 'store'])->name('brand.store');
-Route::put('/brand/update/{id}', [brandController::class, 'update'])->name('brand.update');
-Route::delete('/brand/{id}', [brandController::class, 'destroy'])->name('brand.destroy');
-
+Route::post('/brand/store', [BrandController::class, 'store'])->name('brand.store');
+Route::put('/brand/update/{id}', [BrandController::class, 'update'])->name('brand.update');
+Route::delete('/brand/{id}', [BrandController::class, 'destroy'])->name('brand.destroy');
 
 
 Route::get('/supplier', function () {
@@ -131,3 +135,16 @@ Route::get('/tester', function () {
 //     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 //     Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
 // });
+
+Route::get('/api/search-product', function (Illuminate\Http\Request $request) {
+    $query = $request->input('q');
+
+    $results = \App\Models\Product::where('product_name', 'like', "%{$query}%")
+        ->select('id', 'product_name', 'product_stock', 'product_brand', 'product_supplier', 'product_category', 'product_code', 'product_image', 'created_at', 'updated_at')
+        ->limit(10)
+        ->get();
+
+    return response()->json($results);
+});
+
+

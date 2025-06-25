@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Models\OutItem;
-    use App\Models\Brand;
+use App\Models\Brand;
 
 
 
@@ -97,6 +97,18 @@ class ProductController extends Controller
         return view('product.index', compact('products', 'brands'));
     }
 
+
+
+    public function searchPage(Request $request)
+    {
+        $search = $request->input('search');
+
+        $products = Product::when($search, function ($query, $search) {
+            $query->where('product_name', 'like', '%' . $search . '%');
+        })->get();
+
+        return view('product.search', compact('products', 'search'));
+    }
 
 
 }

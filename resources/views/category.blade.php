@@ -71,14 +71,14 @@
             </nav>
             <div class="flex-col items-center justify-center h-full w-full flex gap-3">
                 <div class="bg-white h-[92%] w-[97%] mr-8 ml-7 rounded-3xl ">
-                    <div class="justify-between flex ">
-                        <div
-                            class="relative w-60 mt-10 ml-10 rounded-3xl border border-gray-300 h-12 justify-center items-center flex">
+                    <div class="justify-end flex ">
+                        {{-- <div
+                            class="relative w-60 mt-10 ml-10 rounded-3xl border border-gray-300 h-12 hidden justify-center items-center flex">
                             <input type="text" placeholder="Search"
                                 class="w-full pl-10 pr-10 py-3 px-6 rounded-3xl text-black text-lg" />
                             <img src="{{ asset('img/search.png') }}" alt="Search"
                                 class="absolute top-1/2 left-1 transform -translate-y-1/2 w-5 h-5" />
-                        </div>
+                        </div> --}}
                         <div class="flex  mr-5">
                             <div
                                 class="relative bg-blue-600 w-44 mt-10  rounded-3xl border border-gray-300 h-12 justify-center items-center flex ">
@@ -89,57 +89,47 @@
                                 <img src="{{ asset('img/add-circle.png') }}" alt="Search"
                                     class="absolute top-1/2 left-3 transform -translate-y-1/2 w-5 h-5 cursor-pointer" />
                             </div>
-                            <div
-                                class="relative w-30 h-12 mt-10 ml-10  rounded-3xl border border-gray-300 flex justify-center items-center">
-                                <button type="text" placeholder="Search"
-                                    class="w-full pl-10 pr-10 py-3 px-6 ml-2 rounded-3xl text-black text-lg cursor-pointer justify-center items-center"
-                                    href="/filter">
-                                    Filter
-                                </button>
-                                <img src="{{ asset('img/filter.png') }}" alt="Search"
-                                    class="absolute top-1/2 left-3 transform -translate-y-1/2 w-5 h-5" />
-                            </div>
                         </div>
                     </div>
                     <div class=" h-120 overflow-y-auto scrollbar-thin scrollbar-success">
                         <div class="flex gap-4 px-10 py-10 h-full ">
                             <ul class="">
-                                <li class="flex flex-col gap-[65px] mt-19">
+                                <li class="flex flex-col gap-[45px] mt-19">
                                     @foreach ($categories as $category)
                                         <input type="checkbox" class=" "></input>
                                     @endforeach
                                 </li>
                             </ul>
                             <ul class="w-32">Kode Kategori
-                                <li class="flex flex-col gap-14 mt-5">
+                                <li class="flex flex-col gap-9 mt-5">
                                     @foreach ($categories as $category)
                                         <p>{{ $category->category_code }}</p>
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
                             <ul class="w-80 ">Nama Kategori
-                                <li class="flex flex-col gap-14 mt-11 ">
+                                <li class="flex flex-col gap-9 mt-11 ">
                                     @foreach ($categories as $category)
                                         <p>{{ $category->category_name }}</p>
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
                             <ul class="mr-5 w-48">Status
-                                <li class="flex flex-col gap-14 mt-11">
+                                <li class="flex flex-col gap-9 mt-11">
                                     @foreach ($categories as $category)
                                         <p class="flex flex-col ">{{ $category->status }}</p>
                                     @endforeach
                                 </li>
                             </ul>
                             <ul class="mr-5  w-[14%]">Created At
-                                <li class="flex flex-col gap-8 mt-11 w- ">
+                                <li class="flex flex-col gap-3 mt-11 ">
                                     @foreach ($categories as $category)
                                         <p>{{ $category->created_at }}</p>
                                     @endforeach
                                 </li>
                             </ul>
                             <ul class="mr-5 w-[14%]">Updated At
-                                <li class="flex flex-col gap-8 mt-11">
+                                <li class="flex flex-col gap-3 mt-11">
                                     @foreach ($categories as $category)
                                         <p>{{ $category->updated_at }}</p>
                                     @endforeach
@@ -154,9 +144,9 @@
                                                 <button class="open-action-modal " data-id="{{ $category->id }}"
                                                     data-code="{{ $category->category_code }}"
                                                     data-name="{{ $category->category_name }}"
+                                                    data-status="{{ $category->status }}"
                                                     data-created="{{ $category->created_at }}"
-                                                    data-updated="{{ $category->updated_at }}"
-                                                    data-status="{{ $category->status }}">
+                                                    data-updated="{{ $category->updated_at }}">
                                                     <img class="cursor-pointer" src="{{ asset('img/action.png') }}"
                                                         alt="">
                                                 </button>
@@ -183,7 +173,6 @@
                                                     </button>
                                                 </form>
                                             </div>
-
                                         </div>
                                     </li>
                                 @endforeach
@@ -294,7 +283,7 @@
                     </div>
                     <div>
                         <label class="block text-gray-700 font-semibold mb-1">Status</label>
-                        <input type="text" name="category_status" id="edit-category-status"
+                        <input type="text" name="status" id="edit-category-status"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>
                     <div class="flex justify-end gap-4 mt-8 col-span-2">

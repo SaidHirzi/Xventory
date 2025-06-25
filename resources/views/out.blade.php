@@ -113,15 +113,15 @@
                             </ul>
                             <ul class="w-16">Kode
                                 <li class="flex flex-col gap-8 mt-11">
-                                    @foreach ($products as $product)
-                                        <p>{{ $product->product_code }}</p>
+                                    @foreach ($out_items as $out_item)
+                                        <p>{{ $out_item->id }}</p>
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
                             <ul class="w-40 ">Created By
                                 <li class="flex flex-col gap-8 mt-11 ">
                                     @foreach ($out_items as $out_item)
-                                        <p>{{ $out_item->product_name }}</p>
+                                        <p>{{ \Illuminate\Support\Str::limit($out_item->product_name, 10) }}</p>
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
@@ -132,13 +132,15 @@
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
-                            <ul class="mr-5  w-28">Supplier Code
-                                <li class="flex flex-col gap-8 mt-11 w- ">
+                            <ul class="mr-5 w-28">
+                                Supplier Name
+                                <li class="flex flex-col gap-8 mt-11">
                                     @foreach ($out_items as $out_item)
-                                        {{-- {{ $product->product_name }} --}}
-                                    @endforeach ($users as $user)
+                                        <p>{{ \Illuminate\Support\Str::limit($out_item->product_supplier, 10) }}</p>
+                                    @endforeach
                                 </li>
                             </ul>
+
                             <ul class=" justify-center  w-[20%] ">
                                 <p class="flex justify-center w-full mb-11">Action</p>
                                 @foreach ($out_items as $out_item)

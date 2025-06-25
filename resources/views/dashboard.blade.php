@@ -75,25 +75,26 @@
                 <div class="bg-white w-full rounded-3xl shadow p-4 h-[100%] flex justify-center items-center gap-8">
                     <img src="{{ asset('img/box.png') }}" alt="">
                     <div class="flex flex-col">
-                        <h2 class="text-2xl font-bold">1000</h2>
+                        <h2 class="text-2xl font-bold">{{ $totalProducts }}</h2>
                         <p class="text-2xl font-bold">Product</p>
                     </div>
                 </div>
                 <div class="bg-white w-full rounded-3xl shadow p-4 h-[100%] flex justify-center items-center gap-8">
                     <img src="{{ asset('img/brandd.png') }}" alt="">
                     <div class="flex flex-col">
-                        <h2 class="text-2xl font-bold">1000</h2>
+                        <h2 class="text-2xl font-bold">{{ $totalBrands }}</h2>
                         <p class="text-2xl font-bold">Brand</p>
                     </div>
                 </div>
                 <div class="bg-white w-full rounded-3xl shadow p-4 h-[100%] flex justify-center items-center gap-8">
                     <img src="{{ asset('img/people.png') }}" alt="">
                     <div class="flex flex-col">
-                        <h2 class="text-2xl font-bold">1000</h2>
+                        <h2 class="text-2xl font-bold">{{ $totalCategories }}</h2>
                         <p class="text-2xl font-bold">Categories</p>
                     </div>
                 </div>
             </div>
+
 
             <!-- Chart Area -->
             <div class="bg-white h-[75%] w-[97%] rounded-3xl relative shadow px-6 py-4 overflow-hidden">

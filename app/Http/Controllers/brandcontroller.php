@@ -32,32 +32,17 @@ class BrandController extends Controller
         return redirect()->back()->with('success', 'brand berhasil dihapus.');
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //     $brand = brand::findOrFail($id);
-    //     $brand->nama_brand = $request->nama_brand;
-    //     $brand->kode_brand = $request->kode_brand;
-    //     $brand->status = $request->status;
-    //     $brand->save();
-
-    //     return redirect()->back()->with('success', 'Category updated successfully.');
-    // }
-
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'kode_brand' => 'required|string|max:255',
-            'nama_brand' => 'required|string|max:255',
-            'status' => 'required|string|max:50',
-        ]);
-
         $brand = Brand::findOrFail($id);
-        $brand->update([
-            'kode_brand' => $request->kode_brand,
-            'nama_brand' => $request->nama_brand,
-            'status' => $request->status,
-        ]);
+        $brand->nama_brand = $request->nama_brand;
+        $brand->kode_brand = $request->kode_brand;
+        $brand->status = $request->status;
+        $brand->save();
 
-        return redirect()->back()->with('success', 'Supplier berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Produk berhasil diperbarui.');
     }
+
+
+
 }

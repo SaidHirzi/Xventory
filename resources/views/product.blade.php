@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>Document</title>
     @vite('resources/css/app.css')
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,16 +74,14 @@
             <div class="flex-col items-center justify-center h-full w-full flex gap-3">
                 <div class="bg-white h-[92%] w-[97%] mr-8 ml-7 rounded-3xl ">
                     <div class="justify-between flex ">
-                        <form action="{{ route('product.index') }}" method="GET"
-                            class="relative w-60 mt-10 ml-10 rounded-3xl border border-gray-300 h-12 flex items-center">
-                            <input type="text" name="search" placeholder="Search"
-                                class="w-full pl-10 pr-10 py-3 px-6 rounded-3xl text-black text-lg"
-                                value="{{ request('search') }}" />
-                            <button type="submit" class="absolute left-1">
-                                <img src="{{ asset('img/search.png') }}" alt="Search"
-                                    class="w-5 h-5 cursor-pointer" />
-                            </button>
-                        </form>
+                        <!-- Tombol trigger modal -->
+                        <button type="button" onclick="openSearchModal()"
+                            class="relative w-60 mt-10 ml-10 rounded-3xl border border-gray-300 h-12 flex items-center px-4 bg-white">
+                            <img src="{{ asset('img/search.png') }}" alt="Search" class="w-5 h-5 mr-3" />
+                            <span class="text-gray-500 text-lg">Search</span>
+                        </button>
+
+
 
 
                         <div class="flex  mr-5">
@@ -114,7 +114,7 @@
                                 </ul>
                             </ul>
 
-                            <ul class="w-[263px]">Nama Barang
+                            <ul class="w-[248px]">Nama Barang
                                 <li class="flex flex-col gap-10 mt-11 ">
                                     @foreach ($products as $product)
                                         <p>{{ $product->product_name }}</p>
@@ -370,6 +370,24 @@
             </div>
         </div>
     </div>
+    <!-- Modal Search -->
+    <div id="searchModal" class="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50 hidden">
+        <div class="bg-white rounded-xl shadow-xl w-[600px] max-h-[80vh] overflow-auto p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Search Product</h2>
+                <button onclick="closeSearchModal()" class="text-gray-500 text-xl">&times;</button>
+            </div>
+
+            <form method="GET" id="searchForm" class="mb-4">
+                <input type="text" name="search" id="searchInput" placeholder="Search product..."
+                    class="w-full border px-4 py-2 rounded-lg" oninput="liveSearch(this.value)">
+            </form>
+
+            <div id="searchResults">
+                <!-- Live search results will appear here -->
+            </div>
+        </div>
+    </div>
 
 
 
@@ -464,6 +482,56 @@
                 pageWrapper?.classList.remove('blur-sm', 'pointer-events-none');
             });
         });
+
+        function openSearchModal() {
+            document.getElementById('searchModal').classList.remove('hidden');
+        }
+
+        function closeSearchModal() {
+            document.getElementById('searchModal').classList.add('hidden');
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchResults').innerHTML = '';
+        }
+
+        function liveSearch(query) {
+            if (query.length < 2) {
+                document.getElementById('searchResults').innerHTML = '';
+                return;
+            }
+
+            fetch(`/api/search-product?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    let html = '';
+                    if (data.length === 0) {
+                        html = '<p class="text-gray-500">No products found.</p>';
+                    } else {
+                        html = '<ul class="divide-y">';
+                        data.forEach(item => {
+                            html += `
+                    <li class="flex items-center gap-4 py-2">
+                        <img src="/storage/${item.product_image}" alt="${item.product_name}" class="w-10 h-10 object-cover rounded" />
+                        <div class="flex-1 mr-10">
+                            <p class="font-semibold">${item.product_name}</p>
+                            <p class="text-sm text-gray-500">${item.product_brand}</p>
+                        </div>
+                        <div class="flex gap-2 mt-1">
+                            <form action="/product/${item.id}/move-to-out" method="POST" onsubmit="return confirm('Pindahkan produk ini ke Out Item?');">
+                                <input type="hidden" name="_token" value="${document.querySelector('meta[name="csrf-token"]').getAttribute('content')}">
+                                <button type="submit">
+                                    <img src="/img/action-2.png" width="30" class="cursor-pointer" alt="delete" />
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                    `;
+                        });
+                        html += '</ul>';
+                    }
+
+                    document.getElementById('searchResults').innerHTML = html;
+                });
+        }
     </script>
 </body>
 

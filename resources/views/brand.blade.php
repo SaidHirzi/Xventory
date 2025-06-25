@@ -71,14 +71,14 @@
             </nav>
             <div class="flex-col items-center justify-center h-full w-full flex gap-3">
                 <div class="bg-white h-[92%] w-[97%] mr-8 ml-7 rounded-3xl ">
-                    <div class="justify-between flex ">
-                        <div
+                    <div class="justify-end flex ">
+                        {{-- <div
                             class="relative w-60 mt-10 ml-10 rounded-3xl border border-gray-300 h-12 justify-center items-center flex">
                             <input type="text" placeholder="Search"
                                 class="w-full pl-10 pr-10 py-3 px-6 rounded-3xl text-black text-lg" />
                             <img src="{{ asset('img/search.png') }}" alt="Search"
                                 class="absolute top-1/2 left-1 transform -translate-y-1/2 w-5 h-5" />
-                        </div>
+                        </div> --}}
                         <div class="flex  mr-5">
                             <div
                                 class="relative bg-blue-600 w-44 mt-10  rounded-3xl border border-gray-300 h-12 justify-center items-center flex ">
@@ -88,16 +88,6 @@
                                 </button>
                                 <img src="{{ asset('img/add-circle.png') }}" alt="Search"
                                     class="absolute top-1/2 left-3 transform -translate-y-1/2 w-5 h-5 cursor-pointer" />
-                            </div>
-                            <div
-                                class="relative w-30 h-12 mt-10 ml-10  rounded-3xl border border-gray-300 flex justify-center items-center">
-                                <button type="text" placeholder="Search"
-                                    class="w-full pl-10 pr-10 py-3 px-6 ml-2 rounded-3xl text-black text-lg cursor-pointer justify-center items-center"
-                                    href="/filter">
-                                    Filter
-                                </button>
-                                <img src="{{ asset('img/filter.png') }}" alt="Search"
-                                    class="absolute top-1/2 left-3 transform -translate-y-1/2 w-5 h-5" />
                             </div>
                         </div>
                     </div>
@@ -111,37 +101,37 @@
                                 </li>
                             </ul>
                             <ul class="w-32">Kode Brand
-                                <li class="flex flex-col gap-8 mt-11">
+                                <li class="flex flex-col gap-9 mt-11">
                                     @foreach ($brands as $brand)
                                         <p>{{ $brand->kode_brand }}</p>
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
                             <ul class="w-80 ">Nama Brand
-                                <li class="flex flex-col gap-8 mt-11 ">
+                                <li class="flex flex-col gap-9 mt-11 ">
                                     @foreach ($brands as $brand)
                                         <p>{{ $brand->nama_brand }}</p>
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
                             <ul class="mr-5 w-48">Status
-                                <li class="flex flex-col gap-8 mt-11">
+                                <li class="flex flex-col gap-9 mt-11">
                                     @foreach ($brands as $brand)
                                         <p class="flex flex-col ">{{ $brand->status }}</p>
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
                             <ul class="mr-5  w-[14%]">Created At
-                                <li class="flex flex-col gap-8 mt-11 w- ">
+                                <li class="flex flex-col gap-3 mt-11 ">
                                     @foreach ($brands as $brand)
-                                        {{ $brand->created_at }}
+                                        <p>{{ $brand->created_at }}</p>
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
                             <ul class="mr-5 w-[14%]">Updated At
-                                <li class="flex flex-col gap-8 mt-11">
+                                <li class="flex flex-col gap-3 mt-11">
                                     @foreach ($brands as $brand)
-                                        {{ $brand->updated_at }}
+                                        <p>{{ $brand->updated_at }}</p>
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
@@ -279,20 +269,19 @@
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="brand_id" id="edit-brand-id">
-
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-1">Nama Barang</label>
-                        <input type="text" name="brand_name" id="edit-brand-name"
+                        <label class="block text-gray-700 font-semibold mb-1">Nama Brand</label>
+                        <input type="text" name="nama_brand" id="edit-brand-name"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-1">Brand Code</label>
-                        <input type="text" name="brand_code" id="edit-brand-code"
+                        <label class="block text-gray-700 font-semibold mb-1">Kode Brand</label>
+                        <input type="text" name="kode_brand" id="edit-brand-code"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>
                     <div>
                         <label class="block text-gray-700 font-semibold mb-1">Status</label>
-                        <input type="text" name="brand_status" id="edit-status"
+                        <input type="text" name="status" id="edit-status"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>
                     <div class="flex justify-end gap-4 mt-8 col-span-2">
@@ -342,7 +331,6 @@
                 const code = button.dataset.code;
                 const status = button.dataset.status;
 
-
                 document.getElementById('edit-brand-id').value = id;
                 document.getElementById('edit-brand-name').value = name;
                 document.getElementById('edit-brand-code').value = code;
@@ -378,8 +366,8 @@
                     const updated = button.dataset.updated;
 
                     modalContent.innerHTML = `
-                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Kode brand:</label><p class="text-gray-700 font-semibold">${code}</p></div>
-                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Nama brand:</label><p class="text-gray-700 font-semibold">${name}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Kode Brand:</label><p class="text-gray-700 font-semibold">${code}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Nama Brand:</label><p class="text-gray-700 font-semibold">${name}</p></div>
                     <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Status:</label><p class="text-gray-700 font-semibold">${status}</p></div>
                     <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Created At:</label><p class="text-gray-700 font-semibold">${created}</p></div>
                     <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Updated At:</label><p class="text-gray-700 font-semibold">${updated}</p></div>

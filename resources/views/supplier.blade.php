@@ -71,14 +71,14 @@
             </nav>
             <div class="flex-col items-center justify-center h-full w-full flex gap-3">
                 <div class="bg-white h-[92%] w-[97%] mr-8 ml-7 rounded-3xl ">
-                    <div class="justify-between flex ">
-                        <div
+                    <div class="justify-end flex ">
+                        {{-- <div
                             class="relative w-60 mt-10 ml-10 rounded-3xl border border-gray-300 h-12 justify-center items-center flex">
                             <input type="text" placeholder="Search"
                                 class="w-full pl-10 pr-10 py-3 px-6 rounded-3xl text-black text-lg" />
                             <img src="{{ asset('img/search.png') }}" alt="Search"
                                 class="absolute top-1/2 left-1 transform -translate-y-1/2 w-5 h-5" />
-                        </div>
+                        </div> --}}
                         <div class="flex  mr-5">
                             <div
                                 class="relative bg-blue-600 w-44 mt-10  rounded-3xl border border-gray-300 h-12 justify-center items-center flex ">
@@ -88,16 +88,6 @@
                                 </button>
                                 <img src="{{ asset('img/add-circle.png') }}" alt="Search"
                                     class="absolute top-1/2 left-3 transform -translate-y-1/2 w-5 h-5 cursor-pointer" />
-                            </div>
-                            <div
-                                class="relative w-30 h-12 mt-10 ml-10  rounded-3xl border border-gray-300 flex justify-center items-center">
-                                <button type="text" placeholder="Search"
-                                    class="w-full pl-10 pr-10 py-3 px-6 ml-2 rounded-3xl text-black text-lg cursor-pointer justify-center items-center"
-                                    href="/filter">
-                                    Filter
-                                </button>
-                                <img src="{{ asset('img/filter.png') }}" alt="Search"
-                                    class="absolute top-1/2 left-3 transform -translate-y-1/2 w-5 h-5" />
                             </div>
                         </div>
                     </div>

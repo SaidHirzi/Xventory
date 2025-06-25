@@ -111,12 +111,20 @@
                                     @endforeach
                                 </li>
                             </ul>
-                            <ul class="w-16">Kode
-                                <li class="flex flex-col gap-8 mt-11">
+                            <ul class="">
+                                <li>Kode Barang</li>
+                                <ul class="flex flex-col gap-10 mt-11">
                                     @foreach ($products as $product)
-                                        <p>{{ $product->product_code }}</p>
-                                    @endforeach ($users as $user)
-                                </li>
+                                        @php
+                                            // Ambil brand berdasarkan nama brand yang sama dengan product_brand
+                                            $brand = $brands->firstWhere('nama_brand', $product->product_brand);
+                                        @endphp
+                                        <li class="flex ">
+                                            <span>{{ $brand ? $brand->kode_brand : '-' }}</span>
+                                            <span>{{ $product->id }}</span>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </ul>
                             <ul class="w-40 ">Created By
                                 <li class="flex flex-col gap-8 mt-11 ">
