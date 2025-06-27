@@ -171,7 +171,7 @@
                                         <div class=" flex gap-2 mt-1 ">
                                             <div class="mb-3">
                                                 <button class="open-action-modal " data-id="{{ $product->id }}"
-                                                    data-code="{{ $product->product_code }}"
+                                                    data-code="{{ $product->id }}"
                                                     data-name="{{ $product->product_name }}"
                                                     data-stock="{{ $product->product_stock }}"
                                                     data-created="{{ $product->created_at }}"

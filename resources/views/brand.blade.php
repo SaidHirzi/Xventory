@@ -94,7 +94,7 @@
                     <div class=" h-120 overflow-y-auto scrollbar-thin scrollbar-success">
                         <div class="flex gap-4 px-10 py-10 h-full ">
                             <ul class="">
-                                <li class="flex flex-col gap-[43px] mt-19">
+                                <li class="flex flex-col gap-[46px] mt-19">
                                     @foreach ($brands as $brand)
                                         <input type="checkbox" class=" "></input>
                                     @endforeach

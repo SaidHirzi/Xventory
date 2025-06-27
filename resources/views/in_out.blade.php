@@ -112,7 +112,7 @@
                                 </li>
                             </ul>
                             <ul class="">
-                                <li>Kode Barang</li>
+                                <p>Kode Barang</p>
                                 <ul class="flex flex-col gap-8 mt-11">
                                     @foreach ($products as $product)
                                         @php
@@ -120,7 +120,7 @@
                                             $brand = $brands->firstWhere('nama_brand', $product->product_brand);
                                         @endphp
                                         <li class="flex ">
-                                            <span>{{ $brand ? $brand->kode_brand : '-' }}</span>
+                                            {{-- <span>{{ $brand ? $brand->kode_brand : '-' }}</span> --}}
                                             <span>{{ $product->id }}</span>
                                         </li>
                                     @endforeach
@@ -154,7 +154,7 @@
                                 @foreach ($products as $product)
                                     <li class="flex gap-2 mb-1 w-full justify-center">
                                         <div class="mb-3">
-                                            <button class="open-action-modal " data-id="{{ $product->id }}"
+                                            <button class="open-action-modal" data-id="{{ $product->id }}"
                                                 data-address="{{ $product->address }}"
                                                 data-name="{{ $product->product_name }}"
                                                 data-code="{{ $product->product_code }}"
@@ -177,7 +177,7 @@
 
     </div>
     </div>
-    <div id="modal-overlay"
+    {{-- <div id="modal-overlay"
         class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden justify-center items-center z-50 w-full h-full">
         <div
             class="bg-white shadow-xl w-[800px] p-8 rounded-3xl relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -230,7 +230,7 @@
                     class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer">Tambah</button>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <div id="modal-overlay1"
         class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden justify-center items-center z-50 w-full h-full">
@@ -247,58 +247,6 @@
     </div>
 
     <script>
-        const addButton = document.querySelector('.bg-blue-600 button');
-        const modal = document.getElementById('modal-overlay');
-        const closeModal = document.getElementById('close-modal');
-        const closeModal1 = document.getElementById('close-modal1');
-
-        addButton.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-            pageWrapper.classList.add('blur-sm', 'pointer-events-none');
-        });
-
-        closeModal.addEventListener('click', () => {
-            modal.classList.add('hidden');
-            pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
-        });
-
-        closeModal1.addEventListener('click', () => {
-            modal.classList.add('hidden');
-            pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
-        });
-
-        const editButtons = document.querySelectorAll('.edit-button');
-        const editModal = document.getElementById('edit-modal');
-        const closeEditModal = document.getElementById('close-edit-modal');
-        const closeEditModal1 = document.getElementById('close-edit-modal1');
-        const editForm = document.getElementById('edit-form');
-
-        editButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const id = button.dataset.id;
-                const name = button.dataset.name;
-                const code = button.dataset.code;
-                const status = button.dataset.status;
-
-                document.getElementById('edit-product-id').value = id;
-                document.getElementById('edit-product-name').value = name;
-                document.getElementById('edit-product-code').value = code;
-                document.getElementById('edit-status').value = status;
-
-
-                editForm.action = `/brand/update/${id}`; // ganti sesuai route kamu
-                editModal.classList.remove('hidden');
-                pageWrapper.classList.add('blur-sm', 'pointer-events-none');
-            });
-        });
-
-        [closeEditModal, closeEditModal1].forEach(button => {
-            button.addEventListener('click', () => {
-                editModal.classList.add('hidden');
-                pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
-            });
-        });
-
         document.addEventListener('DOMContentLoaded', () => {
             const actionButtons = document.querySelectorAll('.open-action-modal');
             const modal1 = document.getElementById('modal-overlay1');
@@ -310,16 +258,13 @@
                 button.addEventListener('click', () => {
                     const code = button.dataset.code;
                     const name = button.dataset.name;
-                    const status = button.dataset.status;
+                    const supplier = button.dataset.supplier;
                     const created = button.dataset.created;
-                    const updated = button.dataset.updated;
-
                     modalContent.innerHTML = `
                     <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Kode Brand:</label><p class="text-gray-700 font-semibold">${code}</p></div>
                     <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Nama Brand:</label><p class="text-gray-700 font-semibold">${name}</p></div>
-                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Status:</label><p class="text-gray-700 font-semibold">${status}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Status:</label><p class="text-gray-700 font-semibold">${supplier}</p></div>
                     <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Created At:</label><p class="text-gray-700 font-semibold">${created}</p></div>
-                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Updated At:</label><p class="text-gray-700 font-semibold">${updated}</p></div>
                     `;
 
                     modal1.classList.remove('hidden');

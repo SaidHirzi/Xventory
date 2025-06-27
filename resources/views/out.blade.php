@@ -118,7 +118,7 @@
                                     @endforeach ($users as $user)
                                 </li>
                             </ul>
-                            <ul class="w-40 ">Created By
+                            <ul class="w-40 ">Nama Barang
                                 <li class="flex flex-col gap-8 mt-11 ">
                                     @foreach ($out_items as $out_item)
                                         <p>{{ \Illuminate\Support\Str::limit($out_item->product_name, 10) }}</p>
@@ -147,12 +147,11 @@
                                     <li class="flex gap-2 mb-1 w-full justify-center">
                                         <div class="mb-3">
                                             <button class="open-action-modal" data-id="{{ $out_item->id }}"
-                                                data-address="{{ $out_item->address }}"
-                                                data-name="{{ $out_item->out_item_name }}"
-                                                data-code="{{ $out_item->out_item_code }}"
+                                                data-id="{{ $out_item->id }}"
+                                                data-name="{{ $out_item->product_name }}"
+                                                data-category="{{ $out_item->product_category }}"
                                                 data-created="{{ $out_item->created_at }}"
-                                                data-updated="{{ $out_item->updated_at }}"
-                                                data-status="{{ $out_item->status }}">
+                                                data-brand="{{ $out_item->product_brand }}">
                                                 <img class="cursor-pointer" src="{{ asset('img/action.png') }}"
                                                     alt="">
                                             </button>
@@ -244,58 +243,6 @@
 
 
     <script>
-        const addButton = document.querySelector('.bg-blue-600 button');
-        const modal = document.getElementById('modal-overlay');
-        const closeModal = document.getElementById('close-modal');
-        const closeModal1 = document.getElementById('close-modal1');
-
-        addButton.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-            pageWrapper.classList.add('blur-sm', 'pointer-events-none');
-        });
-
-        closeModal.addEventListener('click', () => {
-            modal.classList.add('hidden');
-            pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
-        });
-
-        closeModal1.addEventListener('click', () => {
-            modal.classList.add('hidden');
-            pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
-        });
-
-        const editButtons = document.querySelectorAll('.edit-button');
-        const editModal = document.getElementById('edit-modal');
-        const closeEditModal = document.getElementById('close-edit-modal');
-        const closeEditModal1 = document.getElementById('close-edit-modal1');
-        const editForm = document.getElementById('edit-form');
-
-        editButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const id = button.dataset.id;
-                const name = button.dataset.name;
-                const code = button.dataset.code;
-                const status = button.dataset.status;
-
-                document.getElementById('edit-brand-id').value = id;
-                document.getElementById('edit-brand-name').value = name;
-                document.getElementById('edit-brand-code').value = code;
-                document.getElementById('edit-status').value = status;
-
-
-                editForm.action = `/brand/update/${id}`; // ganti sesuai route kamu
-                editModal.classList.remove('hidden');
-                pageWrapper.classList.add('blur-sm', 'pointer-events-none');
-            });
-        });
-
-        [closeEditModal, closeEditModal1].forEach(button => {
-            button.addEventListener('click', () => {
-                editModal.classList.add('hidden');
-                pageWrapper.classList.remove('blur-sm', 'pointer-events-none');
-            });
-        });
-
         document.addEventListener('DOMContentLoaded', () => {
             const actionButtons = document.querySelectorAll('.open-action-modal');
             const modal1 = document.getElementById('modal-overlay1');
@@ -305,18 +252,18 @@
 
             actionButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    const code = button.dataset.code;
+                    const id = button.dataset.id;
                     const name = button.dataset.name;
-                    const status = button.dataset.status;
+                    const category = button.dataset.category;
                     const created = button.dataset.created;
-                    const updated = button.dataset.updated;
+                    const brand = button.dataset.brand;
 
                     modalContent.innerHTML = `
-                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Kode Brand:</label><p class="text-gray-700 font-semibold">${code}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Kode Brand:</label><p class="text-gray-700 font-semibold">${id}</p></div>
                     <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Nama Brand:</label><p class="text-gray-700 font-semibold">${name}</p></div>
-                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Status:</label><p class="text-gray-700 font-semibold">${status}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Status:</label><p class="text-gray-700 font-semibold">${category}</p></div>
                     <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Created At:</label><p class="text-gray-700 font-semibold">${created}</p></div>
-                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Updated At:</label><p class="text-gray-700 font-semibold">${updated}</p></div>
+                    <div class="flex mb-4"><label class="block text-gray-700 font-semibold mb-1 mr-3">Updated At:</label><p class="text-gray-700 font-semibold">${brand}</p></div>
                     `;
 
                     modal1.classList.remove('hidden');
